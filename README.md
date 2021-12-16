@@ -16,4 +16,11 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 # journal
 
-![plot](./assets/screenshots/1.png height=200, width=200)
+<p align="justify">
+  <img src="./assets/screenshots/1.png" width="150" height="300">
+  <img src="./assets/screenshots/2.png" width="150" height="300">
+  <img src="./assets/screenshots/3.png" width="150" height="300">
+   <img src="./assets/screenshots/4.png" width="150" height="300">
+  <img src="./assets/screenshots/5.png" width="150" height="300">
+  <img src="./assets/screenshots/6.png" width="150" height="300">
+</p>
