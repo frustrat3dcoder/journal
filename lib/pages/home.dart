@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:journal/bloc/authentication_bloc.dart';
 import 'package:journal/bloc/authentication_bloc_provider.dart';
 import 'package:journal/bloc/home_bloc.dart';
@@ -10,6 +11,8 @@ import 'package:journal/classes/mood_icons.dart';
 import 'package:journal/models/journal.dart';
 import 'package:journal/pages/edit_entry.dart';
 import 'package:journal/services/db_firestore.dart';
+import 'package:journal/utils/ads_state.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -24,10 +27,21 @@ class _HomeState extends State<Home> {
   late String _uid;
   final MoodIcons _moodIcons = const MoodIcons();
   final FormatDates _formatDates = FormatDates();
-
+  late BannerAd bannerAd;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        bannerAd = BannerAd(
+            size: AdSize.banner,
+            adUnitId: adState.bannerId,
+            listener: adState.adListener,
+            request: const AdRequest())
+          ..load();
+      });
+    });
     _authenticationBloc =
         AuthenticationBlocProvider.of(context).authenticationBloc;
     _homeBloc = HomeBlocProvider.of(context).homeBloc;
@@ -134,8 +148,9 @@ class _HomeState extends State<Home> {
           }),
         ),
       ),
-      bottomNavigationBar: const SizedBox(
+      bottomNavigationBar: SizedBox(
         height: 50,
+        child: bannerAd == null ? Container() : AdWidget(ad: bannerAd),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF5D5682),

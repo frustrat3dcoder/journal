@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:journal/pages/home.dart';
 import 'package:journal/bloc/authentication_bloc.dart';
 import 'package:journal/bloc/authentication_bloc_provider.dart';
@@ -8,13 +9,22 @@ import 'package:journal/bloc/home_bloc_provider.dart';
 import 'package:journal/services/authentication.dart';
 import 'package:journal/services/db_firestore.dart';
 import 'package:journal/pages/login.dart';
+import 'package:journal/utils/ads_state.dart';
 import 'package:journal/utils/const.dart';
 import 'package:journal/utils/pallete.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final initFuture = MobileAds.instance.initialize();
+  final adState = AdState(initialization: initFuture);
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    Provider.value(
+      value: adState,
+      builder: (context, child) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
